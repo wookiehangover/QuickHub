@@ -74,7 +74,11 @@ this.HandlebarsTemplates["org_nav"] = Handlebars.template(function (Handlebars,d
   stack1 = helpers.avatar_url || depth0.avatar_url
   if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
   else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "avatar_url", { hash: {} }); }
-  buffer += escapeExpression(stack1) + "\" width=\"50px\">\n<a href=\"#\">";
+  buffer += escapeExpression(stack1) + "\" width=\"50px\">\n<a href=\"#\" data-repo=\"";
+  stack1 = helpers.login || depth0.login
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
+  else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "login", { hash: {} }); }
+  buffer += escapeExpression(stack1) + "\">";
   stack1 = helpers.login || depth0.login
   if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
   else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "login", { hash: {} }); }

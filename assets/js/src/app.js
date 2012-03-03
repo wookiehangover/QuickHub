@@ -269,16 +269,13 @@ Backbone.Model.prototype.idAttribute = "_id";
 //}
 
 module.exports = this.QuickHub;
-}, "modules/repos": function(exports, require, module) {}, "repos": function(exports, require, module) {var nm = require('./modules/namespace');
-
-var RepoView = Backbone.View.extend({
+}, "modules/repos": function(exports, require, module) {
+var RepoView = exports.View = Backbone.View.extend({
 
   tagName: 'article',
 
   initialize: function(){
-    if( ! this.model.get('name') )
-      debugger;
-    this.render();
+    //this.render();
   },
 
   render: function(){
@@ -297,9 +294,9 @@ var RepoView = Backbone.View.extend({
 
 });
 
-/* ------------------------------ Model ------------------------------ */
+/* ------------------------------ Repo Model ------------------------------ */
 
-var Repo = Backbone.Model.extend({
+var Repo = exports.Model = Backbone.Model.extend({
 
   initialize: function(){
 
@@ -323,9 +320,9 @@ var Repo = Backbone.Model.extend({
 
 });
 
-/* ------------------------------ Collection ------------------------------ */
+/* ------------------------------ Repo Collection ------------------------------ */
 
-var ReposCollection = Backbone.Collection.extend({
+var ReposCollection = exports.Collection = Backbone.Collection.extend({
 
   model: Repo,
 
@@ -333,10 +330,23 @@ var ReposCollection = Backbone.Collection.extend({
 
   initialize: function(){
     this.deferred = this.fetch();
+
+    this.on('reset', function(){
+      this.each(function( repo ){
+        repo.view.render();
+      });
+    }, this);
+
+  },
+
+  comparator: function( repo ){
+    return -new Date( repo.get('pushed_at') );
   }
 
 });
-
+}, "repos": function(exports, require, module) {var
+  nm = require('./modules/namespace'),
+  repos = require('./modules/repos');
 
 var OrgView = Backbone.View.extend({
 
@@ -349,21 +359,6 @@ var OrgView = Backbone.View.extend({
   render: function(){
     var content = JST.org_nav( this.model.toJSON() );
     this.$el.html( content ).appendTo('#orgs');
-  },
-
-  events: {
-    "click a": "changeRepos"
-  },
-
-  changeRepos: function( e ){
-
-    var org_name = $(e.currentTarget).text();
-
-    $('#repos').empty();
-
-    new ( ReposCollection.extend({ url: '/api/orgs/'+ org_name +'/repos?type=member' }) )();
-
-    return false;
   }
 
 });
@@ -390,8 +385,22 @@ var OrgsCollection = Backbone.Collection.extend({
 
 nm.init = function( $ ){
 
-  nm.repos = new ReposCollection();
+  nm.repos = { user: new repos.Collection() };
   nm.orgs = new OrgsCollection();
+
+  $('#orgs').on('click', 'a', function(e){
+    $('#repos').empty();
+
+    var org_name = $(e.currentTarget).data('repo');
+
+    if( nm.repos[org_name] ){
+      nm.repos[org_name].trigger('reset');
+    } else {
+      nm.repos[org_name] = new ( repos.Collection.extend({ url: '/api/orgs/'+ org_name +'/repos?type=member' }) )();
+    }
+
+    return false; 
+  });
 
 };
 
