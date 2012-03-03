@@ -1,7 +1,16 @@
-<h1><a href="{{repository.url}}" target="_blank">{{ repository.name }}</a></h1>
+<header>
+  <h1>
+    <a href="{{head_commit.url}}">{{head_commit.message}}</a>
+  </h1>
+  <p>in <a href="{{repository.url}}" target="_blank">{{ repository.name }}</a></p>
+  <time>{{head_commit.timestamp}}</time>
+</header>
+<div class="detail">
 {{#with head_commit}}
-  {{author.username}}
-  {{timestamp}}
-  <a href="{{url}}" target="_blank">view</a>
-  <p>{{message}}</p>
+  <dl>
+    <dt>blame:
+    <dd>{{author.username}}
+  </dl>
+  <a href="{{url}}" target="_blank">Details</a>
 {{/with}}
+</div>

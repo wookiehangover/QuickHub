@@ -66,7 +66,7 @@ io.sockets.on('connection', function( socket ){
 
 app.get('/', routes.index);
 
-app.get('/admin', routes.admin);
+app.get('/repos', routes.repos);
 
 app.get('/hooks', routes.hooks);
 
@@ -78,14 +78,13 @@ app.post('/api/hook', function( req, res ){
 
   var data = JSON.parse( req.body.payload );
 
-  io.sockets.emit( 'hook', data );
-
   var commit = new models.commit( data );
 
   commit.save(function(err){
     if( err )
       throw new Error(err);
 
+    io.sockets.emit( 'hook', data );
     res.send({}, 202);
   });
 });
