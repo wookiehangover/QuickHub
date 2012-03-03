@@ -97,12 +97,12 @@ nm.init = function( $ ){
   nm.commits = new CommitsCollection();
 
   nm.socket.on('connect', function(){
+    console.log('connected');
+  });
 
-    nm.socket.on('hook', function( body ){
-      console.log('fired');
-      nm.commits.add( new Commit( body ) );
-    });
-
+  nm.socket.on('hook', function( body ){
+    console.log('fired');
+    nm.commits.add( new Commit( body ) );
   });
 
 };
