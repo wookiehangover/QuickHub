@@ -13,6 +13,8 @@ var
   models       = require('./lib/models'),
   mongooseAuth = models.mongooseAuth;
 
+var sio = require('socket.io');
+
 // Create server instance
 
 var app = express.createServer(
@@ -48,17 +50,59 @@ app.configure('production', function(){
 
 mongooseAuth.helpExpress( app );
 
+// Web Sockets
+
+var io = sio.listen( app );
+
+io.sockets.on('connection', function( socket ){
+
+  socket.on('disconnect', function () {
+    io.sockets.emit('user disconnected');
+  });
+
+});
+
 // Routes
 
 app.get('/', routes.index);
 
 app.get('/admin', routes.admin);
 
-app.get('/api/repos', routes.github.repos);
+app.get('/hooks', routes.hooks);
 
 app.get('/api/orgs', routes.github.orgs);
 
 app.get('/api/orgs/:org/repos', routes.github.org_repos);
+
+app.post('/api/hook', function( req, res ){
+
+  var data = JSON.parse( req.body.payload );
+
+  io.sockets.emit( 'hook', data );
+
+  var commit = new models.commit( data );
+
+  commit.save(function(err){
+    if( err )
+      throw new Error(err);
+
+    res.send({}, 202);
+  });
+});
+
+app.get('/api/hooks', routes.github.hooks.index);
+
+app.get('/api/commits', routes.commit.index);
+
+app.get('/api/repos', routes.github.repos);
+
+app.get('/api/repos/:user/:repo/hooks', routes.github.hooks.show);
+
+app.post('/api/repos/:user/:repo/hooks', routes.github.hooks.create);
+
+app.del('/api/repos/:user/:repo/hooks/:id', routes.github.hooks.del);
+
+app.post('/api/repos/:user/:repo/hooks/:id/test', routes.github.hooks.test);
 
 app.listen( process.env.PORT || 3000 );
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);

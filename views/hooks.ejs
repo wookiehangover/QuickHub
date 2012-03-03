@@ -1,0 +1,14 @@
+<section id="repos">
+
+  <% hooks.forEach(function(hook){ %>
+    <article>
+      <h1><%- hook.repo %></h1>
+      <a href="/api/<%= hook.get('url').split('github.com/')[1] %>" class="remove-hook">remove</a>
+      <a href="/api/<%= hook.get('url').split('github.com/')[1] %>/test" class="test-hook">test</a>
+      <pre>
+      <%= hook %>
+      </pre>
+    </article>
+  <% }) %>
+
+</section>

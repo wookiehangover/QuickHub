@@ -48,7 +48,95 @@
     };
   }
   return this.require.define;
-}).call(this)({"modules/localstorage": function(exports, require, module) {/**
+}).call(this)({"dashboard": function(exports, require, module) {var nm = require('./modules/namespace');
+
+var CommitView = Backbone.View.extend({
+
+  tagName: 'li',
+
+  initialize: function(){
+    this.render();
+  },
+
+  render: function(){
+    var content = JST.commit( this.model.toJSON() );
+    this.$el.html( content ).prependTo('#commits');
+  }
+
+});
+
+/* ------------------------------ Model ------------------------------ */
+
+var Commit = Backbone.Model.extend({
+
+  initialize: function(){
+    console.log(this);
+    this.view = new CommitView({ model: this });
+  }
+
+});
+
+/* ------------------------------ Collection ------------------------------ */
+
+var CommitsCollection = Backbone.Collection.extend({
+
+  url: '/api/commits/',
+
+  model: Commit,
+
+  initialize: function(){
+    this.deferred = this.fetch();
+  }
+
+});
+
+/* ------------------------------ Socket ------------------------------ */
+
+nm.init = function( $ ){
+
+  nm.commits = new CommitsCollection();
+
+  var socket = io.connect();
+
+  socket.on('connect', function(){
+
+    socket.on('hook', function( body ){
+
+      nm.commits.add( new Commit( body ) );
+
+    });
+
+  });
+
+};
+
+
+jQuery( nm.init );
+}, "hooks": function(exports, require, module) {var nm = require('./modules/namespace');
+
+$('.remove-hook').on('click', function( e ){
+  var $this = $(this);
+
+  $.ajax({
+    type: 'delete',
+    url: $this.attr('href')
+  }).done(function(){
+    $this.parent().remove();
+  });
+
+  return false;
+});
+
+$('.test-hook').on('click', function( e ){
+
+  $.post( $(this).attr('href'), function( data ){
+    console.log(data);
+  });
+
+  return false;
+});
+
+}, "modules/localstorage": function(exports, require, module) {/**
  * Backbone localStorage Adapter v1.0
  * https://github.com/jeromegn/Backbone.localStorage
  */
@@ -184,7 +272,7 @@ Backbone.Model.prototype.idAttribute = "_id";
 //}
 
 module.exports = this.QuickHub;
-}, "repos": function(exports, require, module) {var nm = require('./modules/namespace');
+}, "modules/repos": function(exports, require, module) {}, "repos": function(exports, require, module) {var nm = require('./modules/namespace');
 
 var RepoView = Backbone.View.extend({
 
@@ -197,6 +285,15 @@ var RepoView = Backbone.View.extend({
   render: function(){
     var content = JST.repo( this.model.toJSON() );
     this.$el.html( content ).appendTo('#repos');
+  },
+
+  events: {
+    "click a": "createHook"
+  },
+
+  createHook: function( e ){
+    this.model.createHook();
+    return false;
   }
 
 });
@@ -213,6 +310,16 @@ var Repo = Backbone.Model.extend({
       this.view.render();
     }, this);
 
+  },
+
+  createHook: function(){
+    $.post('/api/repos/'+ this.get('owner').login +'/'+ this.get('name') +'/hooks', {
+      name: "web",
+      active: true,
+      config: {
+        url: "http://dev.wookiehangover.com/api/hook"
+      }
+    });
   }
 
 });
@@ -235,7 +342,7 @@ var ReposCollection = Backbone.Collection.extend({
 
 nm.init = function( $ ){
 
-  new ReposCollection();
+  nm.repos = new ReposCollection();
 
 };
 

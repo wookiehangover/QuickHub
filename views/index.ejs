@@ -1,5 +1,12 @@
 <section class="dashboard">
-<pre>
-<%- JSON.stringify(everyauth.github, '', '  ') %>
-</pre>
+
+<% if( ! everyauth.loggedIn ){ %>
+<a href="/auth/github">Login</a>
+<% } %>
+
+<ul id="commits">
+
+</ul>
+
 </section>
+

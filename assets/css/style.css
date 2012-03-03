@@ -217,7 +217,9 @@ td { vertical-align: top; }
 /* ==|== primary styles =====================================================
    Author:
    ========================================================================== */
+#container { width: 960px; margin: 0 auto; }
 
+#repos article { border-bottom: 1px solid #ccc; }
 
 
 

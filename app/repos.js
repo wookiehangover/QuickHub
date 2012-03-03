@@ -11,6 +11,15 @@ var RepoView = Backbone.View.extend({
   render: function(){
     var content = JST.repo( this.model.toJSON() );
     this.$el.html( content ).appendTo('#repos');
+  },
+
+  events: {
+    "click a": "createHook"
+  },
+
+  createHook: function( e ){
+    this.model.createHook();
+    return false;
   }
 
 });
@@ -27,6 +36,16 @@ var Repo = Backbone.Model.extend({
       this.view.render();
     }, this);
 
+  },
+
+  createHook: function(){
+    $.post('/api/repos/'+ this.get('owner').login +'/'+ this.get('name') +'/hooks', {
+      name: "web",
+      active: true,
+      config: {
+        url: "http://dev.wookiehangover.com/api/hook"
+      }
+    });
   }
 
 });
@@ -49,7 +68,7 @@ var ReposCollection = Backbone.Collection.extend({
 
 nm.init = function( $ ){
 
-  new ReposCollection();
+  nm.repos = new ReposCollection();
 
 };
 
