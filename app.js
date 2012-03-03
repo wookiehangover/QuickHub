@@ -74,6 +74,8 @@ app.get('/api/orgs', routes.github.orgs);
 
 app.get('/api/orgs/:org/repos', routes.github.org_repos);
 
+app.get('/api/users/:user/orgs/:org', routes.github.org_events);
+
 app.post('/api/hook', function( req, res ){
 
   var data = JSON.parse( req.body.payload );

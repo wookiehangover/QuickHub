@@ -63,6 +63,27 @@ function program1(depth0,data) {
 
 (function(){
 this['JST'] || (this['JST'] = {});
+this.JST["org_nav"] = function(context) { return HandlebarsTemplates["org_nav"](context); };
+this.HandlebarsTemplates || (this.HandlebarsTemplates = {});
+this.HandlebarsTemplates["org_nav"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  helpers = helpers || Handlebars.helpers;
+  var buffer = "", stack1, self=this, functionType="function", helperMissing=helpers.helperMissing, undef=void 0, escapeExpression=this.escapeExpression;
+
+
+  buffer += "<img src=\"";
+  stack1 = helpers.avatar_url || depth0.avatar_url
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
+  else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "avatar_url", { hash: {} }); }
+  buffer += escapeExpression(stack1) + "\" width=\"50px\">\n<a href=\"#\">";
+  stack1 = helpers.login || depth0.login
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
+  else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "login", { hash: {} }); }
+  buffer += escapeExpression(stack1) + "</a>\n";
+  return buffer;});
+}).call(this);
+
+(function(){
+this['JST'] || (this['JST'] = {});
 this.JST["repo"] = function(context) { return HandlebarsTemplates["repo"](context); };
 this.HandlebarsTemplates || (this.HandlebarsTemplates = {});
 this.HandlebarsTemplates["repo"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {

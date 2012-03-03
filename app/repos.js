@@ -5,6 +5,8 @@ var RepoView = Backbone.View.extend({
   tagName: 'article',
 
   initialize: function(){
+    if( ! this.model.get('name') )
+      debugger;
     this.render();
   },
 
@@ -32,9 +34,9 @@ var Repo = Backbone.Model.extend({
 
     this.view = new RepoView({ model: this });
 
-    this.bind('change', function(){
-      this.view.render();
-    }, this);
+    //this.bind('change', function(){
+      //this.view.render();
+    //}, this);
 
   },
 
@@ -65,10 +67,60 @@ var ReposCollection = Backbone.Collection.extend({
 });
 
 
+var OrgView = Backbone.View.extend({
+
+  className: 'item',
+
+  initialize: function(){
+    this.render();
+  },
+
+  render: function(){
+    var content = JST.org_nav( this.model.toJSON() );
+    this.$el.html( content ).appendTo('#orgs');
+  },
+
+  events: {
+    "click a": "changeRepos"
+  },
+
+  changeRepos: function( e ){
+
+    var org_name = $(e.currentTarget).text();
+
+    $('#repos').empty();
+
+    new ( ReposCollection.extend({ url: '/api/orgs/'+ org_name +'/repos?type=member' }) )();
+
+    return false;
+  }
+
+});
+
+var Org = Backbone.Model.extend({
+
+  initialize: function(){
+    this.view = new OrgView({ model: this });
+  }
+
+});
+
+var OrgsCollection = Backbone.Collection.extend({
+
+  model: Org,
+
+  url: '/api/orgs',
+
+  initialize: function(){
+    this.deferred = this.fetch();
+  }
+
+});
 
 nm.init = function( $ ){
 
   nm.repos = new ReposCollection();
+  nm.orgs = new OrgsCollection();
 
 };
 

@@ -20,7 +20,6 @@ var CommitView = Backbone.View.extend({
 var Commit = Backbone.Model.extend({
 
   initialize: function(){
-    console.log(this);
     this.view = new CommitView({ model: this });
   }
 
@@ -41,19 +40,17 @@ var CommitsCollection = Backbone.Collection.extend({
 });
 
 /* ------------------------------ Socket ------------------------------ */
+nm.socket = io.connect();
 
 nm.init = function( $ ){
 
   nm.commits = new CommitsCollection();
 
-  var socket = io.connect();
+  nm.socket.on('connect', function(){
 
-  socket.on('connect', function(){
-
-    socket.on('hook', function( body ){
-
+    nm.socket.on('hook', function( body ){
+      console.log('fired');
       nm.commits.add( new Commit( body ) );
-
     });
 
   });

@@ -220,12 +220,18 @@ td { vertical-align: top; }
 
 
 #main-header { background: #F2F2F2; height: 28px; padding-top: 8px; font-size: 14px; }
+#main-header .login { float: right; }
 #main-header nav { width: 960px; margin: 0 auto; }
 #main-header nav a { text-decoration: none; margin-right: 6px; }
 
 #container { width: 960px; margin: 0 auto; }
 
-#repos article { border-bottom: 1px solid #ccc; }
+#repos { width: 720px; float: left; padding-top: 10px; }
+#repos article { float: left; width: 700px; border-bottom: 1px solid #ccc; padding: 10px 0; }
+#repos article h1 { margin: 0; }
+
+#orgs { float: right; width: 240px; padding-top: 20px; }
+#orgs .item { padding-bottom: 20px; float:left; width: 240px; }
 
 #commits { padding: 0; list-style-type: none; font-size: 14px; font-weight: normal; }
 #commits li { float:left; margin: 0 0 20px 0; width: 100%; background: #F2F2F2; border: 1px solid #C4C4C4; border-radius: 4px; }
@@ -251,6 +257,8 @@ td { vertical-align: top; }
 #commits dt { display: inline-block; }
 #commits dd { display: inline-block; margin: 0 20px 0 10px; font-style: italic; }
 
+#orgs .item,
+#repos article,
 #commits li {
   -webkit-animation: myanim 0.8s;
      -moz-animation: myanim 0.8s;
