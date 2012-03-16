@@ -50,8 +50,9 @@
   <script src="/js/src/templates.js"></script>
   <script src="/js/src/app.js"></script>
 
-  <% if( typeof js_module !== 'undefined' ){ %>
+  <% if( js_module ){ %>
   <script>
+    <% if( user ) { %>_id = "<%= user.id %>";<% } %>
     require('<%= js_module %>');
   </script>
   <% } %>

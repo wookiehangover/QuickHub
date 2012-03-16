@@ -76,11 +76,15 @@ app.get('/api/orgs/:org/repos', routes.github.org_repos);
 
 app.get('/api/users/:user/orgs/:org', routes.github.org_events);
 
-app.post('/api/hook', function( req, res ){
+app.post('/api/hook/:id', function( req, res ){
 
   var data = JSON.parse( req.body.payload );
 
   var commit = new models.commit( data );
+
+  commit._owner = req.params.id;
+
+  console.log(data);
 
   commit.save(function(err){
     if( err )
@@ -94,6 +98,7 @@ app.post('/api/hook', function( req, res ){
 app.get('/api/hooks', routes.github.hooks.index);
 
 app.get('/api/commits', routes.commit.index);
+app.del('/api/commits/:id', routes.commit.del);
 
 app.get('/api/repos', routes.github.repos);
 

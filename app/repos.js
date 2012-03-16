@@ -41,9 +41,10 @@ nm.init = function( $ ){
 
   nm.repos = { user: new repos.Collection() };
   nm.orgs = new OrgsCollection();
+  nm.qs = $('#filter').quicksearch('#repos article');
 
   $('#orgs').on('click', 'a', function(e){
-    $('#repos').empty();
+    $('#repos').html('<img src="/images/loader.gif" class="loader" />');
 
     var org_name = $(e.currentTarget).data('repo');
 

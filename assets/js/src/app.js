@@ -56,11 +56,24 @@ var CommitView = Backbone.View.extend({
 
   initialize: function(){
     this.render();
+
+    this.model.bind('destroy', this.remove, this);
+  },
+
+  events: {
+    'click .icon-remove': 'destroy'
   },
 
   render: function(){
     var content = JST.commit( this.model.toJSON() );
     this.$el.html( content ).prependTo('#commits');
+  },
+
+  destroy: function(e){
+    if( confirm('Are you sure you want to remove this commit?') )
+      this.model.destroy();
+
+    return false;
   }
 
 });
@@ -269,7 +282,8 @@ Backbone.Model.prototype.idAttribute = "_id";
 //}
 
 module.exports = this.QuickHub;
-}, "modules/repos": function(exports, require, module) {
+}, "modules/repos": function(exports, require, module) {var nm = require('./namespace');
+
 var RepoView = exports.View = Backbone.View.extend({
 
   tagName: 'article',
@@ -280,7 +294,10 @@ var RepoView = exports.View = Backbone.View.extend({
 
   render: function(){
     var content = JST.repo( this.model.toJSON() );
-    this.$el.html( content ).appendTo('#repos');
+    var repos = $('#repos');
+
+    repos.find('.loader').remove();
+    this.$el.html( content ).appendTo( repos );
   },
 
   events: {
@@ -288,7 +305,12 @@ var RepoView = exports.View = Backbone.View.extend({
   },
 
   createHook: function( e ){
-    this.model.createHook();
+    var _this = this;
+
+    this.model.createHook()
+      .done(function(){
+        alert('hook added');
+      });
     return false;
   }
 
@@ -309,11 +331,11 @@ var Repo = exports.Model = Backbone.Model.extend({
   },
 
   createHook: function(){
-    $.post('/api/repos/'+ this.get('owner').login +'/'+ this.get('name') +'/hooks', {
+    return $.post('/api/repos/'+ this.get('owner').login +'/'+ this.get('name') +'/hooks', {
       name: "web",
       active: true,
       config: {
-        url: "http://dev.wookiehangover.com/api/hook"
+        url: "http://dev.wookiehangover.com/api/hook/"+ window._id
       }
     });
   }
@@ -335,6 +357,10 @@ var ReposCollection = exports.Collection = Backbone.Collection.extend({
       this.each(function( repo ){
         repo.view.render();
       });
+
+      if( nm.qs )
+        nm.qs.cache();
+
     }, this);
 
   },
@@ -387,9 +413,10 @@ nm.init = function( $ ){
 
   nm.repos = { user: new repos.Collection() };
   nm.orgs = new OrgsCollection();
+  nm.qs = $('#filter').quicksearch('#repos article');
 
   $('#orgs').on('click', 'a', function(e){
-    $('#repos').empty();
+    $('#repos').html('<img src="/images/loader.gif" class="loader" />');
 
     var org_name = $(e.currentTarget).data('repo');
 

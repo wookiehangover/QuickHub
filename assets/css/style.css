@@ -587,10 +587,10 @@ li[class^="icon-"].icon-large:before, li[class*=" icon-"].icon-large:before {
 .commit-list header p { float:left; margin: 0 0 0 10px; line-height: 2.2em; }
 .commit-list header a.icon-remove { position: absolute; top: 6px; right: 6px; text-decoration: none; opacity: 0; color: red; }
 .commit-list header a.icon-remove {
-  -webkit-transition: opacity 0.3s ease-out;
-     -moz-transition: opacity 0.3s ease-out;
-      -ms-transition: opacity 0.3s ease-out;
-       -o-transition: opacity 0.3s ease-out;
+  -webkit-transition: opacity 0.3s ease-out; 
+     -moz-transition: opacity 0.3s ease-out; 
+      -ms-transition: opacity 0.3s ease-out; 
+       -o-transition: opacity 0.3s ease-out; 
           transition: opacity 0.3s ease-out;
 }
 .commit-list li:hover a.icon-remove { opacity: 1; }
@@ -603,20 +603,20 @@ li[class^="icon-"].icon-large:before, li[class*=" icon-"].icon-large:before {
           transition: color 0.3s ease-out;
 
 }
-#commits header:hover time { color: #C4C4C4; }
+.commit-list header:hover time { color: #C4C4C4; }
 
-#commits h1 { margin: 0; float:left;  }
-#commits h1 a {text-decoration: none; }
-#commits .detail { float:left; padding: 10px; width: 940px; background: #fff; }
-#commits .detail a { float: right; }
+.commit-list h1 { margin: 0; float:left;  }
+.commit-list h1 a {text-decoration: none; }
+.commit-list .detail { float:left; padding: 10px; width: 940px; background: #fff; }
+.commit-list .detail a { float: right; }
 
-#commits dl { float: left; margin: 0; }
-#commits dt { display: inline-block; }
-#commits dd { display: inline-block; margin: 0 20px 0 10px; font-style: italic; }
+.commit-list dl { float: left; margin: 0; }
+.commit-list dt { display: inline-block; }
+.commit-list dd { display: inline-block; margin: 0 20px 0 10px; font-style: italic; }
 
 #orgs .item,
 #repos article,
-#commits li {
+.commit-list li {
   -webkit-animation: myanim 0.8s;
      -moz-animation: myanim 0.8s;
       -ms-animation: myanim 0.8s;

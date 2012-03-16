@@ -6,11 +6,24 @@ var CommitView = Backbone.View.extend({
 
   initialize: function(){
     this.render();
+
+    this.model.bind('destroy', this.remove, this);
+  },
+
+  events: {
+    'click .icon-remove': 'destroy'
   },
 
   render: function(){
     var content = JST.commit( this.model.toJSON() );
     this.$el.html( content ).prependTo('#commits');
+  },
+
+  destroy: function(e){
+    if( confirm('Are you sure you want to remove this commit?') )
+      this.model.destroy();
+
+    return false;
   }
 
 });
