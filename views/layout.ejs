@@ -26,8 +26,10 @@
       <a href="/">Dashboard</a>
       <a href="/hooks">Hooks</a>
       <a href="/repos">Repos</a>
-      <% if( ! everyauth.loggedIn ){ %>
-      <a href="/auth/github" class="login">Login</a>
+      <% if( everyauth.loggedIn ){ %>
+      <a href="/logout" class="login"><i class="icon-signout"></i>Logout</a>
+      <% } else { %>
+      <a href="/auth/github" class="login"><i class="icon-user"></i>Login with GitHub</a>
       <% } %>
 
     </nav>
