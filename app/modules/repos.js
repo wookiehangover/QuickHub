@@ -1,3 +1,4 @@
+var nm = require('./namespace');
 
 var RepoView = exports.View = Backbone.View.extend({
 
@@ -64,6 +65,10 @@ var ReposCollection = exports.Collection = Backbone.Collection.extend({
       this.each(function( repo ){
         repo.view.render();
       });
+
+      if( nm.qs )
+        nm.qs.cache();
+
     }, this);
 
   },

@@ -570,17 +570,31 @@ li[class^="icon-"].icon-large:before, li[class*=" icon-"].icon-large:before {
 #container { width: 960px; margin: 0 auto; }
 
 #repos { width: 720px; float: left; padding-top: 10px; }
-#repos article { float: left; width: 700px; border-bottom: 1px solid #ccc; padding: 10px 0; }
+#repos .loader { margin: 40px 0 0 350px; opacity: 0.6; }
+#repos article { float: left; width: 700px; border-bottom: 1px solid #ccc; padding: 10px 0; line-height: 24px; }
 #repos article h1 { margin: 0; }
+
+.repo-filter { margin-top: 20px; float: left; }
+.repo-filter .add-on { float: left; }
+.repo-filter input { width: 644px; padding: 10px; font-size: 20px; border: 1px solid #eaeaea; float: left;}
 
 #orgs { float: right; width: 240px; padding-top: 20px; }
 #orgs .item { padding-bottom: 20px; float:left; width: 240px; }
 
-#commits { padding: 0; list-style-type: none; font-size: 14px; font-weight: normal; }
-#commits li { float:left; margin: 0 0 20px 0; width: 100%; background: #F2F2F2; border: 1px solid #C4C4C4; border-radius: 4px; }
-#commits header { float:left; padding: 10px; widtH: 940px; border-bottom: 1px solid #C4C4C4; }
-#commits header p { float:left; margin: 0 0 0 10px; line-height: 2.2em; }
-#commits header time { float: right; font-weight: italic; color: #DCDCDA; line-height: 2.2em;
+.commit-list { padding: 0; list-style-type: none; font-size: 14px; font-weight: normal; }
+.commit-list li { float:left; margin: 0 0 20px 0; width: 100%; background: #F2F2F2; border: 1px solid #C4C4C4; border-radius: 4px; position: relative; }
+.commit-list header { float:left; padding: 10px; widtH: 940px; border-bottom: 1px solid #C4C4C4; }
+.commit-list header p { float:left; margin: 0 0 0 10px; line-height: 2.2em; }
+.commit-list header a.icon-remove { position: absolute; top: 6px; right: 6px; text-decoration: none; opacity: 0; color: red; }
+.commit-list header a.icon-remove {
+  -webkit-transition: opacity 0.3s ease-out;
+     -moz-transition: opacity 0.3s ease-out;
+      -ms-transition: opacity 0.3s ease-out;
+       -o-transition: opacity 0.3s ease-out;
+          transition: opacity 0.3s ease-out;
+}
+.commit-list li:hover a.icon-remove { opacity: 1; }
+.commit-list header time { float: right; font-weight: italic; color: #DCDCDA; line-height: 2.2em;
 
   -webkit-transition: color 0.3s ease-out; 
      -moz-transition: color 0.3s ease-out; 
